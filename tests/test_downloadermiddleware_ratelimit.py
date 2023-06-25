@@ -15,13 +15,10 @@ from scrapy_strava.middlewares.ratelimit import SimpleStravaRateLimitMiddleware
 class SimpleStravaRateLimitMiddlewareTest(unittest.TestCase):
     def setUp(self):
         self.mw = SimpleStravaRateLimitMiddleware()
-        self.spider = Spider('foo')
+        self.spider = Spider('foo', rate_limit_status='ok')
 
     def tearDown(self):
         del self.mw
-
-    def _get_spider_status(self):
-        return getattr(self.spider, 'rate_limit_status', None)
 
     def test_resp_limited(self):
         req = Request('http://example.com')
@@ -32,27 +29,23 @@ class SimpleStravaRateLimitMiddlewareTest(unittest.TestCase):
                     #    body=json.dumps([]).encode('utf-8'),
                     #    request=req)
         
-        status_pre = self._get_spider_status()
+        assert self.spider.rate_limit_status == 'ok'
         
         # Test that response passes through MW unaffected
         assert self.mw.process_response(req, res, self.spider) is res
 
-        status_post = self._get_spider_status()
-
-        # Test that MW sets a spider attribute
-        assert status_pre is None
-        assert status_post == 'active'
+        assert self.spider.rate_limit_status == 'active'
 
     def test_resp_not_limited(self):
         req = Request('http://example.com')
         res = Response('http://example.com', status=400)
         
-        assert self._get_spider_status() is None
+        assert self.spider.rate_limit_status == 'ok'
 
         # Test that response passes through MW unaffected
         assert self.mw.process_response(req, res, self.spider) is res
 
-        assert self._get_spider_status() is None
+        assert self.spider.rate_limit_status == 'ok'
 
     def test_req_limited(self):
         req = Request('http://example.com')
