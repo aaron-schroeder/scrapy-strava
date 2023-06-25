@@ -1,2 +1,5 @@
-from scrapy_strava.middlewares.oauth import StravaOAuth2Middleware
-from scrapy_strava.middlewares.ratelimit import SimpleStravaRateLimitMiddleware
+from scrapy_strava.middlewares import StravaOAuth2Middleware
+from scrapy_strava.middlewares import SimpleStravaRateLimitMiddleware
+
+
+__all__ = ['StravaOAuth2Middleware', 'SimpleStravaRateLimitMiddleware']

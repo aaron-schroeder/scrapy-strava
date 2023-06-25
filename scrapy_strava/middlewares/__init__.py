@@ -1,0 +1,2 @@
+from scrapy_strava.middlewares.oauth import StravaOAuth2Middleware
+from scrapy_strava.middlewares.ratelimit import SimpleStravaRateLimitMiddleware
