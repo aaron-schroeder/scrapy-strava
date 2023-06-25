@@ -15,6 +15,14 @@ DOWNLOADER_MIDDLEWARES = {
    "scrapy_strava.middlewares.ratelimit.SimpleStravaRateLimitMiddleware": 544,
 }
 ```
+If you use `SimpleStravaRateLimitMiddleware`, allow your spider to handle the
+accompanying 429 HTTP status code.
+```python
+class MySpider(scrapy.Spider):
+   # ...
+   handle_httpstatus_list = [429, ...]
+   # ...
+```
 
 ## Dev
 
